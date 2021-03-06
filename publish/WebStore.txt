@@ -1,9 +1,11 @@
 
-This extension enable the local link.
-This extension make it possible to open a local file or folder by clicking the link to the file or folder.
-The local file will be opened by the application associated with the file if the file suffix is
-.xlsx or .docx or .pdf, otherwise opend by Windows Explorer.
+Open local link by clicking
 
-This extension requires a native client appication installed in the local PC.
-The installation instruction is displayed at the installation of this extension.
+This extension make it possible to open a local file or folder by clicking its link  (tag <a href="file://...">) in Web page.
+When you click the lin, the local file would be opened by the application associated with the file if the file suffix is xlsx, docx or pdf, otherwise opened in Windows Explorer.
 
+This extension requires installing native client application in the local PC.
+The installation instruction will be displayed at the installation of this extension.
+
+- the local link must be a <a> tag
+- support multi-frame web page (frameset)
