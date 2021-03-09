@@ -2,16 +2,21 @@
 // License: MIT 
 
 {
-    // recursively find frames and call callback(frame.contentWindow)
-    let forEachFrameWindow = (w, callback) => {
-        callback(w);
-        w.document.querySelectorAll("frame").forEach((frame) => {
-            forEachFrameWindow(frame.contentWindow, callback);
+    console.log("loading content_script.js");
+
+    // recursively find frames and call callback(frame)
+    let forEachFrame = (fr, callback) => {
+        callback(fr);
+        fr.contentDocument.querySelectorAll("frame").forEach((frame) => {
+            forEachFrame(frame, callback);
         });
     }
 
-    forEachFrameWindow(window, w => {
+    // add click event listner to window
+    let addClickEventListerToWindow = (w) => {
+        //console.log("set lister to: " + w.name)
         w.addEventListener('click', e => {
+            //console.log("click frame window " + w.name)
             // check if user event
             // If event is fired by user's operation then isTrusted == true.
             // Chrome 46.0～
@@ -23,7 +28,7 @@
                 if (a) {
                     if (a.href) {
                         if (a.href.startsWith('file://')) {
-                            console.log("clicked a href: "+a.href)
+                            console.log("clicked a href: " + a.href)
                             e.preventDefault();
                             e.stopPropagation();
                             e.stopImmediatePropagation();
@@ -44,8 +49,19 @@
         }, {
             capture: true,
         });
-    })
+    }
+
+    // for top window
+    addClickEventListerToWindow(window);
+
+    // for frame windows if exists
+    let frames = document.querySelectorAll("frame") || [];
+    frames.forEach(frame => {
+        forEachFrame(frame, (fr) => { // for all frames and subframes
+            fr.addEventListener("load", e => {
+                console.log("load frame window " + fr.name)
+                addClickEventListerToWindow(fr.contentWindow);
+            });
+        })
+    });
 }
-
-
-
