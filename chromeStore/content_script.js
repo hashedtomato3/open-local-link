@@ -4,13 +4,13 @@
 {
     console.log("loading content_script.js");
 
-    // recursively find frames and call callback(frame)
-    let forEachFrame = (fr, callback) => {
-        callback(fr);
-        fr.contentDocument.querySelectorAll("frame").forEach((frame) => {
-            forEachFrame(frame, callback);
-        });
-    }
+    // // recursively find frames and call callback(frame)
+    // let forEachFrame = (fr, callback) => {
+    //     callback(fr);
+    //     fr.contentDocument.querySelectorAll("frame").forEach((frame) => {
+    //         forEachFrame(frame, callback);
+    //     });
+    // }
 
     // add click event listner to window
     let addClickEventListerToWindow = (w) => {
@@ -29,9 +29,9 @@
                     if (a.href) {
                         if (a.href.startsWith('file://')) {
                             console.log("clicked a href: " + a.href)
-                            e.preventDefault();
-                            e.stopPropagation();
-                            e.stopImmediatePropagation();
+                            //e.preventDefault();
+                            //e.stopPropagation();
+                            //e.stopImmediatePropagation();
                             // Catch the error for the extension is reloaded.
                             try {
                                 chrome.runtime.sendMessage({
@@ -41,27 +41,28 @@
                             } catch (err) {
                                 console.log(err)
                             }
-                            return false;
+                            //return false;
                         }
                     }
                 }
             }
         }, {
-            capture: true,
+            passive: true,
+            //capture: true,
         });
     }
 
     // for top window
     addClickEventListerToWindow(window);
 
-    // for frame windows if exists
-    let frames = document.querySelectorAll("frame") || [];
-    frames.forEach(frame => {
-        forEachFrame(frame, (fr) => { // for all frames and subframes
-            fr.addEventListener("load", e => {
-                console.log("load frame window " + fr.name)
-                addClickEventListerToWindow(fr.contentWindow);
-            });
-        })
-    });
+    // // for frame windows if exists
+    // let frames = document.querySelectorAll("frame") || [];
+    // frames.forEach(frame => {
+    //     forEachFrame(frame, (fr) => { // for all frames and subframes
+    //         fr.addEventListener("load", e => {
+    //             console.log("load frame window " + fr.name)
+    //             addClickEventListerToWindow(fr.contentWindow);
+    //         });
+    //     })
+    // });
 }
