@@ -4,11 +4,13 @@
 // app name
 const appName = "com.node.open_local"
 
+//import JSZip from 'jszip';
+
 {
   // set title
   document.getElementById("extName").innerHTML = chrome.runtime.getManifest().name;
   
-  // set manifest download link
+  // set manifest data
   const manifest = {
     "name": "com.node.open_local",
     "description": "Open local link by clicking it",
@@ -19,12 +21,17 @@ const appName = "com.node.open_local"
     ]
   };
   const manifestJson = JSON.stringify(manifest, null, '\t');
-  const blob = new Blob([manifestJson], {
-        type: 'text/plain',
-  });
-  const downloadLink = document.getElementById('manifest_link');
-  downloadLink.href = URL.createObjectURL(blob);
 
+  // set host.zip link
+  const resp = await fetch("/host.zip"); 
+  const host_blob = await resp.blob(); 
+  const zip = new JSZip(); 
+  const top_zip = await zip.loadAsync(host_blob); 
+  const host_zip = await top_zip.folder("host"); 
+  host_zip.file("manifest.json", manifestJson); 
+  const blob2 = await top_zip.generateAsync({type:"blob"});   
+  const hostZipLink = document.getElementById('host_zip_link');
+  hostZipLink.href = URL.createObjectURL(blob2);
 
   // on click of check instalation button
   document.getElementById("check").addEventListener("click", function(e){
