@@ -72,13 +72,13 @@ const openByExplorer = (path) => {
           return;
       }
       if (stats.isDirectory()) {
-          execFile('cmd',  ['/c', 'start', path]);
+          execFile('cmd',  ['/c', 'start', '"title"', path]);
           sendMessage({
               path,
               resultMessage: 'opened the folder.',
           });
       } else if(fileSuffix.some(elem => path.toLowerCase().endsWith(elem))) {
-        execFile('cmd',  ['/c', 'start', path]);
+        execFile('cmd',  ['/c', 'start', '"title"', path]);
         sendMessage({
             path,
             resultMessage: 'opened the file.',
