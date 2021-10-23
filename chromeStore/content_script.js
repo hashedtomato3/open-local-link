@@ -29,6 +29,8 @@
                     if (a.href) {
                         if (a.href.startsWith('file://')) {
                             console.log("clicked a href: " + a.href)
+                            //const href = decodeURIComponent(a.href);
+                            //console.log("decoded href: "+href)
                             //e.preventDefault();
                             //e.stopPropagation();
                             //e.stopImmediatePropagation();
