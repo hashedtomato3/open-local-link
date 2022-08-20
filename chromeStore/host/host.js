@@ -61,7 +61,7 @@ const fileSuffix = [".xlsx",".docx", ".pptx",".pdf",".txt"]
 
 /* open */
 const openByExplorer = (path) => {
-  path = decodeURIComponent(path.replace(/#.*/, ''));  
+  path = decodeURIComponent(path);  
   fs.stat(new URL(path), (err, stats) => {
       if (err) {
           sendMessage({
