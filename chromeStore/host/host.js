@@ -60,12 +60,16 @@ function handleMessage(msg) {
 const fileSuffix = [".xlsx",".docx", ".pptx",".pdf",".txt"]
 
 /* open */
-const openByExplorer = (path) => {
-  path = decodeURIComponent(path);  
-  fs.stat(new URL(path), (err, stats) => {
+const openByExplorer = (fileURL) => {
+  // fileURL = file://xxx, canbe URI-encoded, can include "#" that is not uri-encoded
+  //                       ccannot include hash (starting with #), can include # in path names
+  const url = require("url")
+  let path = url.fileURLToPath(fileURL.replace(/#/g, "%23"))
+  fs.stat(path, (err, stats) => {
       if (err) {
           sendMessage({
               path,
+              fileURL,
               resultMessage: 'file/folder not found.',
               err,
           });
@@ -75,18 +79,21 @@ const openByExplorer = (path) => {
           execFile('cmd',  ['/c', 'start', '"title"', path]);
           sendMessage({
               path,
+              fileURL,
               resultMessage: 'opened the folder.',
           });
       } else if(fileSuffix.some(elem => path.toLowerCase().endsWith(elem))) {
         execFile('cmd',  ['/c', 'start', '"title"', path]);
         sendMessage({
             path,
+            fileURL,
             resultMessage: 'opened the file.',
         });               
       } else {
           execFile('explorer', ['/select,', path]);
           sendMessage({
               path,
+              fileURL,
               resultMessage: 'opened the folder containing the file.',
           });
       }
