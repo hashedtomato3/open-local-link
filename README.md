@@ -10,3 +10,5 @@ Chrome Extension to enable local link
 
 > Manually Upload ChromeStore.zip to Chrome store developpers dashboard
 ```
+* [Microsoft partner center](https://partner.microsoft.com/en-us/dashboard/microsoftedge/)
+* [Chrome web store developper dashboard](https://chrome.google.com/webstore/developer/dashboard)
