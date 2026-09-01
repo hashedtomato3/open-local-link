@@ -6,7 +6,7 @@ Chrome Extension to enable local link
 
 ## Deploy
 ```
-> DEPLOY.bat  (creating ChromeStore.zip, host.zip)
+> DEPLOY.bat  (creating ChromeStore.zip)
 
 > Manually Upload ChromeStore.zip to Chrome store developpers dashboard
 ```

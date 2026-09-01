@@ -22,14 +22,19 @@ const appName = "com.node.open_local"
   };
   const manifestJson = JSON.stringify(manifest, null, '\t');
 
-  // set host.zip link
-  const resp = await fetch("/host.zip"); 
-  const host_blob = await resp.blob(); 
-  const zip = new JSZip(); 
-  const top_zip = await zip.loadAsync(host_blob); 
-  const host_zip = await top_zip.folder("host"); 
-  host_zip.file("manifest.json", manifestJson); 
-  const blob2 = await top_zip.generateAsync({type:"blob"});   
+  // build host.zip on the fly from the unzipped "host" folder,
+  // so no zip file needs to be bundled inside the extension package
+  // (a zip inside the package makes Chrome Web Store registration fail).
+  const hostFiles = ["host.bat", "host.js", "install.bat", "uninstall.bat"];
+  const zip = new JSZip();
+  const host_zip = zip.folder("host");
+  for (const fname of hostFiles) {
+    const resp = await fetch(`./host/${fname}`);
+    const blob = await resp.blob();
+    host_zip.file(fname, blob);
+  }
+  host_zip.file("manifest.json", manifestJson);
+  const blob2 = await zip.generateAsync({type:"blob"});
   const hostZipLink = document.getElementById('host_zip_link');
   hostZipLink.href = URL.createObjectURL(blob2);
 
